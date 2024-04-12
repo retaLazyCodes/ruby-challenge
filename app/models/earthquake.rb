@@ -1,2 +1,0 @@
-class Earthquake < ApplicationRecord
-end

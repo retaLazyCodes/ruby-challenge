@@ -3,8 +3,8 @@ require 'uri'
 
 require_relative '../../config/initializers/earthquake_api'
 
-namespace :earthquakes do
-  desc "Fetch recent earthquakes data"
+namespace :features do
+  desc "Fetch recent features data"
   task fetch: :environment do
     require 'faraday'
     require 'json'
@@ -25,7 +25,7 @@ namespace :earthquakes do
       properties = feature['properties']
       geometry = feature['geometry']
 
-      next if Earthquake.exists?(title: properties['title'])
+      next if Feature.exists?(title: properties['title'])
 
       next if properties['title'].nil? ||
            properties['url'].nil? ||
@@ -44,8 +44,8 @@ namespace :earthquakes do
         longitude < -180.0 || 
         longitude > 180.0
 
-      Earthquake.create(
-        custom_id: feature['id'],
+      Feature.create(
+        external_id: feature['id'],
         magnitude: magnitude,
         place: properties['place'],
         time: Time.at(properties['time'] / 1000),

@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_11_233418) do
-  create_table "earthquakes", force: :cascade do |t|
-    t.string "custom_id"
+ActiveRecord::Schema[7.1].define(version: 2024_04_12_023636) do
+  create_table "features", force: :cascade do |t|
+    t.string "external_id"
     t.float "magnitude"
     t.string "place"
     t.datetime "time"

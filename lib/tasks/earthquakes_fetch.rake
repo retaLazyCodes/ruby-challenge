@@ -12,11 +12,11 @@ namespace :earthquakes do
     endtime = DateTime.now.strftime("%Y-%m-%d %H:%M:%S")
     starttime = (DateTime.now - 30).strftime("%Y-%m-%d %H:%M:%S")
 
-    url = "#{EarthquakeAPI::BASE_URL}?starttime=#{URI.encode_www_form_component(starttime)}
-      &endtime=#{URI.encode_www_form_component(endtime)}&minmagnitude=-1&maxmagnitude=10"
+    url = "#{EarthquakeAPI::BASE_URL}?starttime=#{URI.encode_www_form_component(starttime)}&endtime=#{URI.encode_www_form_component(endtime)}&minmagnitude=-1&maxmagnitude=10"
 
     conn = Faraday.new(url: url)
 
+    p "Obteniendo datos de la url: " + url
     response = conn.get
 
     data = JSON.parse(response.body)

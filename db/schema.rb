@@ -11,6 +11,9 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.1].define(version: 2024_04_12_023636) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "features", force: :cascade do |t|
     t.string "external_id"
     t.float "magnitude"
@@ -20,8 +23,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_12_023636) do
     t.boolean "tsunami"
     t.string "mag_type"
     t.string "title"
-    t.float "longitude"
-    t.float "latitude"
+    t.jsonb "coordinates"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

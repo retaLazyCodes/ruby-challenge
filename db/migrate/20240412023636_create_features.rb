@@ -9,8 +9,7 @@ class CreateFeatures < ActiveRecord::Migration[7.1]
       t.boolean :tsunami
       t.string :mag_type
       t.string :title
-      t.float :longitude
-      t.float :latitude
+      t.jsonb :coordinates
 
       t.timestamps
     end

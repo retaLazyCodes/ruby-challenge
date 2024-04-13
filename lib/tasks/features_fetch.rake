@@ -12,7 +12,7 @@ namespace :features do
     endtime = DateTime.now.strftime("%Y-%m-%d %H:%M:%S")
     starttime = (DateTime.now - 30).strftime("%Y-%m-%d %H:%M:%S")
 
-    url = "#{EarthquakeAPI::BASE_URL}?starttime=#{URI.encode_www_form_component(starttime)}&endtime=#{URI.encode_www_form_component(endtime)}&minmagnitude=-1&maxmagnitude=10"
+    url = "#{EarthquakeAPI::BASE_URL}?starttime=#{URI.encode_www_form_component(starttime)}&endtime=#{URI.encode_www_form_component(endtime)}"
 
     conn = Faraday.new(url: url)
 
@@ -25,24 +25,11 @@ namespace :features do
       properties = feature['properties']
       geometry = feature['geometry']
 
-      next if Feature.exists?(title: properties['title'])
-
-      next if properties['title'].nil? ||
-           properties['url'].nil? ||
-           properties['place'].nil? ||
-           properties['magType'].nil? ||
-           geometry['coordinates'].nil?
+      next if Feature.exists?(external_id: properties['id'])
 
       magnitude = properties['mag']
       latitude = geometry['coordinates'][1]
       longitude = geometry['coordinates'][0]
-
-      next if magnitude < -1.0 || 
-        magnitude > 10.0 || 
-        latitude < -90.0 || 
-        latitude > 90.0 || 
-        longitude < -180.0 || 
-        longitude > 180.0
 
       Feature.create(
         external_id: feature['id'],
@@ -53,8 +40,7 @@ namespace :features do
         tsunami: properties['tsunami'],
         mag_type: properties['magType'],
         title: properties['title'],
-        longitude: longitude,
-        latitude: latitude
+        coordinates: { longitude: longitude, latitude: latitude },
       )
     end
 

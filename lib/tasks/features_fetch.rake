@@ -1,8 +1,6 @@
 require 'date'
 require 'uri'
 
-require_relative '../../config/initializers/earthquake_api'
-
 namespace :features do
   desc "Fetch recent features data"
   task fetch: :environment do

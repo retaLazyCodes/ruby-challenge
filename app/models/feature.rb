@@ -1,15 +1,21 @@
 class Feature < ApplicationRecord
-    validates :title, presence: true
-    validates :url, presence: true
-    validates :place, presence: true
-    validates :mag_type, presence: true
-    validates :coordinates, presence: true
+    has_many :comments, dependent: :destroy
+    
+    validates_presence_of :title, :url, :place, :mag_type, :coordinates
     validates :magnitude,
             numericality: {
               greater_than_or_equal_to: -1.0,
               less_than_or_equal_to: 10.0
             }
     validate :validate_coordinates_schema
+
+    def as_json(options = nil)
+      if options && options[:include_comments]
+        super(include: {:comments => {:except => [:id, :feature_id, :created_at, :updated_at]}})
+      else
+        super()
+      end
+    end
 
   private
 

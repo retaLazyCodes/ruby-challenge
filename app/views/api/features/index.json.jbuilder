@@ -22,4 +22,11 @@ json.data @features do |feature|
   json.links do
     json.external_url feature.url
   end
+
+
+  json.pagination do
+    json.current_page @current_page
+    json.total @total
+    json.per_page @per_page
+  end
 end

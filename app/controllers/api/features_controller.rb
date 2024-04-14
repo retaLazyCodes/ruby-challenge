@@ -1,8 +1,11 @@
 module Api
     class FeaturesController < ApplicationController
-        def index
-            @features = Feature.all
-        end
+      def index
+        @features = Feature.page(params[:page]).per(params[:per_page])
+        @current_page = @features.current_page
+        @total = @features.total_count
+        @per_page = @features.limit_value
+      end
 
         def show
             @feature = Feature.find_by(id: params[:id])

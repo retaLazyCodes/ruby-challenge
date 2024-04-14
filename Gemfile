@@ -40,9 +40,11 @@ gem "pg", "~> 1.5.6"
 
 gem "faraday", "~> 2.9.0"
 
-gem 'json-schema', "~> 4.3.0"
+gem "json-schema", "~> 4.3.0"
 
-gem 'jbuilder', "~> 2.11.5"
+gem "jbuilder", "~> 2.11.5"
+
+gem "kaminari", "~> 1.2.2"
 
 
 group :development, :test do

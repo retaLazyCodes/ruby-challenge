@@ -10,7 +10,6 @@ module Api
       @current_page = @features.current_page
       @total = @features.total_count
       @per_page = @features.limit_value
-      render json: @features, status: :ok
     end
 
     def show

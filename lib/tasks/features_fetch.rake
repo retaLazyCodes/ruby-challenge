@@ -1,16 +1,10 @@
-require 'date'
-require 'uri'
-
 namespace :features do
   desc "Fetch recent features data"
   task fetch: :environment do
     require 'faraday'
     require 'json'
 
-    endtime = DateTime.now.strftime("%Y-%m-%d %H:%M:%S")
-    starttime = (DateTime.now - 30).strftime("%Y-%m-%d %H:%M:%S")
-
-    url = "#{EarthquakeAPI::BASE_URL}?starttime=#{URI.encode_www_form_component(starttime)}&endtime=#{URI.encode_www_form_component(endtime)}"
+    url = EarthquakeAPI::BASE_URL
     conn = Faraday.new(url: url)
 
     puts "Obteniendo datos de la url: " + url

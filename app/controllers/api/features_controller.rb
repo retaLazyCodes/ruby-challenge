@@ -2,7 +2,6 @@ module Api
     class FeaturesController < ApplicationController
         def index
             @features = Feature.all
-            render json: @features, status: :ok
         end
 
         def show

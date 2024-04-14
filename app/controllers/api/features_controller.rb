@@ -7,6 +7,7 @@ module Api
       @features = Feature.all
       @features = @features.where(mag_type: params[:mag_type].split(',')) if params[:mag_type].present?
       @features = @features.page(params[:page]).per(params[:per_page])
+      @features = @features.order(time: :desc)
       @current_page = @features.current_page
       @total = @features.total_count
       @per_page = @features.limit_value

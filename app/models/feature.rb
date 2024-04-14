@@ -28,7 +28,7 @@ class Feature < ApplicationRecord
   def validate_coordinates_schema
     return unless coordinates.present?
     
-    schema_path = Rails.root.join('coordinates_schema.json')
+    schema_path = Rails.root.join('app', 'models', 'coordinates_schema.json')
     
     unless File.exist?(schema_path)
       errors.add(:coordinates, 'schema file not found')

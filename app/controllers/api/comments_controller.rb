@@ -1,4 +1,6 @@
 class Api::CommentsController < ApplicationController
+    rescue_from ActionController::ParameterMissing, with: :missing_parameter
+    
     def create
       feature = Feature.find(params[:feature_id])
       comment = feature.comments.new(comment_params)
@@ -14,5 +16,9 @@ class Api::CommentsController < ApplicationController
   
     def comment_params
       params.require(:comment).permit(:body)
+    end
+
+    def missing_parameter(exception)
+      render json: { error: "Missing parameter: #{exception.param}" }, status: :bad_request
     end
   end

@@ -14,12 +14,10 @@ RUN apt-get update -qq && \
 
 # Install application gems
 COPY Gemfile Gemfile.lock ./
-RUN bundle config set deployment true && \
-    bundle config set without 'test' && \
-    bundle install && \
-    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
-    bundle exec bootsnap precompile --gemfile
 
+RUN gem install bundler:2.5.7
+
+RUN bundle install
 
 # Copy application code
 COPY . .

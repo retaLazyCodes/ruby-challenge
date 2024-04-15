@@ -1,24 +1,28 @@
-# README
+## Ruby Challenge
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
 
-Things you may want to cover:
+#### Requisitos para ejecutar
 
-* Ruby version
+- Docker
+- Docker Compose
+- Git
 
-* System dependencies
+#### Cómo ejecutar
 
-* Configuration
+Primero, clona este repositorio en tu máquina local:
 
-* Database creation
+```bash
+git clone https://github.com/retaLazyCodes/ruby-challenge.git
+```
 
-* Database initialization
+Navega hasta el directorio del repositorio clonado:
+```bash
+cd ruby-challenge
+```
 
-* How to run the test suite
+Por último ejecuta el siguiente comando para iniciar la aplicación con Docker Compose:
+```bash
+docker-compose up
+```
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Una vez que los contenedores estén en funcionamiento, puedes acceder a la aplicación ingresando a http://localhost:3000 en tu navegador web.

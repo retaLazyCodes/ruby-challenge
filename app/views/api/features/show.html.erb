@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feature Details</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    .feature-details {
+      border: 1px solid #ccc;
+      padding: 20px;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+    }
+    .detail-label {
+      font-weight: bold;
+    }
+    .coordinates {
+      font-style: italic;
+    }
+    .back-button {
+      margin-top: 20px;
+    }
+    textarea {
+      resize: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Feature Details</h1>
+  
+  <div class="feature-details">
+    <p><span class="detail-label">ID:</span> <%= @feature.id %></p>
+    <p><span class="detail-label">Title:</span> <%= @feature.title %></p>
+    <p><span class="detail-label">Mag Type:</span> <%= @feature.mag_type %></p>
+    <p><span class="detail-label">Magnitude:</span> <%= @feature.magnitude %></p>
+    <p><span class="detail-label">Place:</span> <%= @feature.place %></p>
+    <p><span class="detail-label">Time:</span> <%= @feature.time %></p>
+    <p><span class="detail-label">Coordinates:</span> 
+      <span class="coordinates">
+        latitude: <%= @feature.coordinates['latitude'] %>, 
+        longitude: <%= @feature.coordinates['longitude'] %>
+      </span>
+    </p>
+    <p><span class="detail-label">Link: <a target="_blank" href=<%= @feature.url %>><%= @feature.url %></a></span></p>
+
+    <% if @feature.comments.any? %>
+        <h2>Comments:</h2>
+        <ul>
+        <% @feature.comments.each do |comment| %>
+            <li><%= comment.body %></li>
+        <% end %>
+        </ul>
+    <% else %>
+        <p>There are no comments for this feature.</p>
+    <% end %>
+  </div>
+
+  <h2>Add Comment:</h2>
+  <form id="commentForm" onsubmit="submitComment(event)">
+    <textarea id="commentText" name="comment" rows="3" cols="30" placeholder="Write your comment here"></textarea>
+    <br>
+    <input type="submit" value="Submit Comment">
+  </form>
+
+  <button class="back-button" onclick="goBack()">Go back</button>
+
+  <script>
+    function submitComment(event) {
+        event.preventDefault();
+
+        const commentText = document.getElementById('commentText').value;
+
+        const commentData = { body: commentText };
+
+        fetch("/api/features/<%= @feature.id %>/comments", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(commentData), // Convertir el objeto a JSON
+        })
+        .then(response => {
+        if (response.ok) {
+            goBack()
+        } else {
+            console.error('Error submitting comment');
+        }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
+    function goBack() {
+      window.history.back();
+    }
+  </script>
+</body>
+</html>

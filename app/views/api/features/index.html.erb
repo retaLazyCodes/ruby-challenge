@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Features</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+    .pagination {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .pagination a {
+      color: black;
+      float: left;
+      padding: 8px 16px;
+      text-decoration: none;
+      transition: background-color .3s;
+    }
+    .pagination a.active {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .pagination a:hover:not(.active) {background-color: #ddd;}
+    .page-info {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .filter-select {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Features</h1>
+
+  <!-- Items per Page combo select -->
+  <label for="items-per-page">Items per Page:</label>
+  <select id="items-per-page" onchange="handleChangeFilter()">
+    <option value="10" <%= 'selected' if @per_page == 10 %>>10</option>
+    <option value="25" <%= 'selected' if @per_page == 25 %>>25</option>
+    <option value="50" <%= 'selected' if @per_page == 50 %>>50</option>
+    <option value="100" <%= 'selected' if @per_page == 100 %>>100</option>
+  </select>
+
+  <h4>Mag Type Filters:</h4>
+  <select id="mag-type-filter" onchange="handleChangeFilter()">
+    <option value="">All</option>
+    <option value="md" <%= 'selected' if params[:mag_type].to_s.split(',').include?('md') %>>md</option>
+    <option value="ml" <%= 'selected' if params[:mag_type].to_s.split(',').include?('ml') %>>ml</option>
+    <option value="ms" <%= 'selected' if params[:mag_type].to_s.split(',').include?('ms') %>>ms</option>
+    <option value="mww" <%= 'selected' if params[:mag_type].to_s.split(',').include?('mww') %>>mww</option>
+    <option value="me" <%= 'selected' if params[:mag_type].to_s.split(',').include?('me') %>>me</option>
+    <option value="mi" <%= 'selected' if params[:mag_type].to_s.split(',').include?('mi') %>>mi</option>
+    <option value="mb" <%= 'selected' if params[:mag_type].to_s.split(',').include?('mb') %>>mb</option>
+    <option value="mlg" <%= 'selected' if params[:mag_type].to_s.split(',').include?('mlg') %>>mlg</option>
+  </select>
+
+
+  <div class="page-info">
+    <p>Page <%= @current_page %> of <%= (@total / @per_page.to_f).ceil %></p>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Mag Type</th>
+        <th>Magnitude</th>
+        <th>Place</th>
+        <th>Time</th>
+        <th>Tsunami</th>
+        <th>Coordinates</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @features.each do |feature| %>
+        <tr>
+          <td><%= feature.title %></td>
+          <td><%= feature.mag_type %></td>
+          <td><%= feature.magnitude %></td>
+          <td><%= feature.place %></td>
+          <td><%= feature.time %></td>
+          <td style="text-align: center;">
+            <%= feature.tsunami ? "🌊" : "❌" %>
+          </td>
+          <td>
+            "latitude": <%= feature.coordinates['latitude'] %>,
+            "longitude": <%= feature.coordinates['longitude'] %>
+          </td>
+          <td>
+            <a href="/api/features/<%= feature.id %>">View Details</a>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  
+  <!-- Pagination -->
+  <% if @total > @per_page %>
+    <div class="pagination">
+      <% if @current_page > 1 %>
+        <%= link_to 'Previous Page', api_features_path(page: @current_page - 1, per_page: @per_page, mag_type: @mag_type_filter) %>
+      <% end %>
+      
+      <% if @current_page < (@total / @per_page.to_f).ceil %>
+        <%= link_to 'Next Page', api_features_path(page: @current_page + 1, per_page: @per_page, mag_type: @mag_type_filter) %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <script>
+    function applyFilters() {
+        const perPage = document.getElementById("items-per-page").value;
+        const currentPage = window.location.pathname;
+        const newUrl = `${currentPage}?per_page=${perPage}&mag_type=${magTypeFilterValue}`;
+        window.location.href = newUrl;
+    }
+    
+    function handleChangeFilter() {
+        const magTypeSelect = document.getElementById("mag-type-filter");
+        magTypeFilterValue = magTypeSelect.value; // Actualizar la variable global
+        const perPage = document.getElementById("items-per-page").value;
+        let newUrl = new URL(window.location.href);
+
+        newUrl.searchParams.set('per_page', perPage);
+
+        if (magTypeFilterValue !== '') {
+            newUrl.searchParams.set('mag_type', magTypeFilterValue);
+        } else {
+            newUrl.searchParams.delete('mag_type');
+        }
+
+        window.location.href = newUrl.toString();
+    }
+  </script>
+</body>
+</html>

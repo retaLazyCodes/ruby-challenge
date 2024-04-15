@@ -14,11 +14,9 @@ module Api
     end
 
     def show
-      @feature = Feature.find_by(id: params[:id])
-      if @feature
-        render json: @feature.as_json(include_comments: true), status: :ok
-      else
-        render json: { error: 'Feature not found' }, status: :not_found
+      @feature = Feature.includes(:comments).find_by(id: params[:id])
+      unless @feature
+        render html: '<p>Feature not found</p>'.html_safe, status: :not_found
       end
     end
 
@@ -34,7 +32,7 @@ module Api
     def validate_mag_type
       if params[:mag_type].present?
         mag_types = params[:mag_type].split(',')
-        valid_mag_types = %w(md ml ms mw me mi mb mlg)
+        valid_mag_types = %w(md ml ms mww me mi mb mlg)
         invalid_mag_types = mag_types - valid_mag_types
         if invalid_mag_types.present?
           error_msg = "Invalid mag_type values: #{invalid_mag_types.join(', ')}"

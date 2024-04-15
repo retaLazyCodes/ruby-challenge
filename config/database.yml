@@ -8,6 +8,11 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: <%= ENV['DB_HOST'] || 'localhost' %>
+  port: <%= ENV['DB_PORT'] || '5432' %>
+  username: <%= ENV['DB_USER'] || 'test' %>
+  password: <%= ENV['DB_PASS'] || '12345' %>
+  database: <%= ENV['DB_NAME'] || 'challenge_db' %>
   timeout: 5000
   template: template0
 
